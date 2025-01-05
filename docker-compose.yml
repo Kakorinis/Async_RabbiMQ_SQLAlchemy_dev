@@ -1,0 +1,75 @@
+version: "1.0"
+services:
+
+  db:
+    container_name: db-container
+    image: postgres:13.1
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_LOGIN}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "834:5432"
+    volumes:
+      - C:\Temp_volumes:/var/lib/postgresql/data  # для винды
+#      - postgres_data:/var/lib/postgresql/data # для линукса
+
+  rabbit:
+    container_name: rabbit-container
+    image: rabbitmq:3.12-management
+    restart: always
+    environment:
+      RABBITMQ_DEFAULT_USER: $RABBIT_USERNAME
+      RABBITMQ_DEFAULT_PASS: $RABBIT_PASSWORD
+    ports:
+      - 15672:15672
+      - 5672:5672
+    healthcheck:
+      test: ["CMD-SHELL", "rabbitmq-diagnostics -q ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+
+  authentication:
+    container_name: authent-container
+    build:
+      context: ./src_2
+      dockerfile: Dockerfile
+    environment:
+      RABBIT_LOGIN: $RABBIT_USERNAME
+      RABBIT_PASSWORD: $RABBIT_PASSWORD
+      RABBIT_SERVICE_NAME: $RABBIT_SERVICE_NAME
+      LOGGING_QUEUE_NAME: $LOGGING_QUEUE_NAME
+      DATABASE: $DATABASE
+      DB_HOST: 'db'
+      DB_PORT: 5432
+      DB_LOGIN: $DB_LOGIN
+      DB_PASSWORD: $DB_PASSWORD
+    restart: always
+
+  users:
+    container_name: user-container
+    build:
+      context: ./src
+      dockerfile: Dockerfile
+    expose:
+      - $INTERNAL_PORT
+    ports:
+      - "8080:${INTERNAL_PORT}"
+    environment:
+      RABBIT_LOGIN: $RABBIT_USERNAME
+      RABBIT_PASSWORD: $RABBIT_PASSWORD
+      RABBIT_SERVICE_NAME: $RABBIT_SERVICE_NAME
+      LOGGING_QUEUE_NAME: $LOGGING_QUEUE_NAME
+      DATABASE: $DATABASE
+      DB_HOST: $DB_HOST
+      DB_PORT: $DB_PORT
+      DB_LOGIN: $DB_LOGIN
+      DB_PASSWORD: $DB_PASSWORD
+    restart: always
+
+# for linux
+#volumes:
+#  postgres_data:
+#    driver: local
