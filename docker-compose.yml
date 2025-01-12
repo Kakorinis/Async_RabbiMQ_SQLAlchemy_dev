@@ -31,43 +31,43 @@ services:
       retries: 5
 
 
-#  authentication:
-#    container_name: authent-container
-#    build:
-#      context: ./authentication_service
-#      dockerfile: Dockerfile
-#    environment:
-#      RABBIT_LOGIN: $RABBIT_USERNAME
-#      RABBIT_PASSWORD: $RABBIT_PASSWORD
-#      RABBIT_SERVICE_NAME: $RABBIT_SERVICE_NAME
-#      LOGGING_QUEUE_NAME: $LOGGING_QUEUE_NAME
-#      DATABASE: $DATABASE
-#      DB_HOST: 'db'
-#      DB_PORT: 5432
-#      DB_LOGIN: $DB_LOGIN
-#      DB_PASSWORD: $DB_PASSWORD
-#    restart: always
-#
-#  users:
-#    container_name: user-container
-#    build:
-#      context: ./users_service
-#      dockerfile: Dockerfile
-#    expose:
-#      - $INTERNAL_PORT
-#    ports:
-#      - "8080:${INTERNAL_PORT}"
-#    environment:
-#      RABBIT_LOGIN: $RABBIT_USERNAME
-#      RABBIT_PASSWORD: $RABBIT_PASSWORD
-#      RABBIT_SERVICE_NAME: $RABBIT_SERVICE_NAME
-#      LOGGING_QUEUE_NAME: $LOGGING_QUEUE_NAME
-#      DATABASE: $DATABASE
-#      DB_HOST: $DB_HOST
-#      DB_PORT: $DB_PORT
-#      DB_LOGIN: $DB_LOGIN
-#      DB_PASSWORD: $DB_PASSWORD
-#    restart: always
+  authentication:
+    container_name: authent-container
+    build:
+      context: ./authentication_service
+      dockerfile: Dockerfile
+    environment:
+      RABBIT_LOGIN: $RABBIT_USERNAME
+      RABBIT_PASSWORD: $RABBIT_PASSWORD
+      RABBIT_SERVICE_NAME: $RABBIT_SERVICE_NAME
+      LOGGING_QUEUE_NAME: $LOGGING_QUEUE_NAME
+      DATABASE: $DATABASE
+      DB_HOST: 'db'
+      DB_PORT: 5432
+      DB_LOGIN: $DB_LOGIN
+      DB_PASSWORD: $DB_PASSWORD
+    restart: always
+
+  users:
+    container_name: user-container
+    build:
+      context: ./users_service
+      dockerfile: Dockerfile
+    expose:
+      - $INTERNAL_PORT
+    ports:
+      - "8080:${INTERNAL_PORT}"
+    environment:
+      RABBIT_LOGIN: $RABBIT_USERNAME
+      RABBIT_PASSWORD: $RABBIT_PASSWORD
+      RABBIT_SERVICE_NAME: $RABBIT_SERVICE_NAME
+      LOGGING_QUEUE_NAME: $LOGGING_QUEUE_NAME
+      DATABASE: $DATABASE
+      DB_HOST: $DB_HOST
+      DB_PORT: $DB_PORT
+      DB_LOGIN: $DB_LOGIN
+      DB_PASSWORD: $DB_PASSWORD
+    restart: always
 
 # раскоментить для linux
 #volumes:

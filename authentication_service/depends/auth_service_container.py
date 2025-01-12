@@ -5,7 +5,7 @@ from sqlalchemy.orm.session import sessionmaker
 from authentication_service.repositories import AuthRepository
 
 
-from settings import common_settings
+from authentication_service.settings import common_settings
 from core.rabbit import create_rabbit_connection
 from core.rabbit import create_rabbit_channel
 from core.rabbit.depends import create_rabbit_async_instance

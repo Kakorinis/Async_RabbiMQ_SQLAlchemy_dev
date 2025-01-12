@@ -1,4 +1,4 @@
-from settings import common_settings
+from authentication_service.settings import common_settings
 from core.models import MixinAutoIdModel
 
 

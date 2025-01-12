@@ -1,6 +1,6 @@
 from core.rabbit import BaseSchemaForEvent, RabbitBase
 from core.rabbit import RabbitControllerBase
-from settings import common_settings
+from authentication_service.settings import common_settings
 
 
 async def example_func(message: dict) -> None:
