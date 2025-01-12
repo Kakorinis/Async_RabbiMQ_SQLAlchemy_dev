@@ -9,22 +9,24 @@ class Settings(CoreSettings):
     RABBIT_SERVICE_NAME: str
     RABBIT_PROTOCOL: str
     LOGGING_QUEUE_NAME: str
-    QUEUE_FOR_OTHER_SERVICE_EVENT: str = ''
-    OTHER_EVENT_EXCHANGE_NAME: str = ''
-    USERS_EVENT_EXCHANGE_NAME: str = ''
+    QUEUE_FOR_LISTEN_AUTHENTICATION_EVENT: str = ''
+    AUTHENTICATION_EVENT_EXCHANGE_NAME: str = ''
+    NEW_USERS_EVENT_EXCHANGE_NAME: str = ''
+    QUEUE_FOR_LISTEN_USERS_EVENT: str = ''
+
     RABBIT_URL_: str = ''
     # MY_SERVICE_EXCHANGE_NAME: str
     # AUTHOR_SERVICE_QUEUE_NAME: str
 
-    QUEUES_EXCHANGES_COMBINATIONS: list = [
-        {
-            'exchange': 'new_users',
-            'queues_for_exchange': [
+    """
+    пример настроек для обменника-очередей:{'exchange': ['queues']}:
+    QUEUES_EXCHANGES_COMBINATIONS: dict = {
+            'new_users': [
                 'authent_queue',
             ]
-        },
-    ]
-
+        }
+    """
+    AUTH_SQL_SCHEMA: str = ''
     @property
     def RABBIT_URL(self) -> str:
         if not self.RABBIT_URL_:

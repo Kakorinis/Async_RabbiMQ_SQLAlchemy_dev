@@ -1,16 +1,22 @@
+from typing import List, Type
+
 from fastapi import FastAPI
 from uvicorn import run
-from my_service.depends.service_container import ServiceContainer
-from my_service.routers.router import router
-from uvicorn import run
+from fastapi import APIRouter
+from users_service.depends import UserServiceContainer
+from authentication_service.depends import AuthServiceContainer
+from authentication_service.routers import auth_router
+from users_service.routers import user_router
+from dependency_injector import containers
+
 # from core.settings import settings
 # from my_service.db.base_db import base_db
-from starlette.middleware import Middleware
-from starlette.middleware.cors import CORSMiddleware
+# from starlette.middleware import Middleware
+# from starlette.middleware.cors import CORSMiddleware
 
 
-def create_app() -> FastAPI:
-    container = ServiceContainer()
+def create_app(depends_container: Type[containers.DeclarativeContainer], routers: List[APIRouter]) -> FastAPI:
+    container = depends_container()
 
     # db = container.db()
     # db.create_database()
@@ -32,12 +38,14 @@ def create_app() -> FastAPI:
     # application = FastAPI(middleware=middleware)
     application = FastAPI()
     application.container = container
-    application.include_router(router)
+    for router in routers:
+        application.include_router(router)
     return application
 
 
-app = create_app()
-
+app = create_app(depends_container=UserServiceContainer, routers=[user_router])
+app_2 = create_app(depends_container=AuthServiceContainer, routers=[auth_router])
 
 if __name__ == "__main__":
     run('main:app', host="0.0.0.0", port=7005, reload=True)
+    run('main:app_2', host="0.0.0.0", port=7007, reload=True)
